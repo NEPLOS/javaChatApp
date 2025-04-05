@@ -1,0 +1,17 @@
+chatppserver/Response/loginResponse.class
+chatppserver/Response/Response.class
+chatppserver/Request/handShakeRequest.class
+chatppserver/Main.class
+chatppserver/serverStatus.class
+chatppserver/Request/loginRequest.class
+chatppserver/MyJDBC.class
+chatppserver/ClientHandler.class
+chatppserver/server.class
+chatppserver/Request/verificationRequest.class
+chatppserver/Request/Request.class
+chatppserver/Response/errorResponse.class
+chatppserver/Request/signupRequest.class
+chatppserver/Response/signupResponse.class
+chatppserver/Response/verificationResponse.class
+chatppserver/Response/handShakeResponse.class
+chatppserver/Request/cookieLoginRequest.class
