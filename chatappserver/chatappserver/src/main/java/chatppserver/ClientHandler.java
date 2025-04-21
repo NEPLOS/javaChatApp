@@ -19,7 +19,10 @@ import chatppserver.Request.handShakeRequest;
 import chatppserver.Request.loginRequest;
 import chatppserver.Request.signupRequest;
 import chatppserver.Request.verificationRequest;
-import chatppserver.Response.*;
+import chatppserver.Response.errorResponse;
+import chatppserver.Response.handShakeResponse;
+import chatppserver.Response.loginResponse;
+import chatppserver.Response.signupResponse;
 
 public class ClientHandler implements Runnable 
 {
@@ -233,6 +236,9 @@ public class ClientHandler implements Runnable
             }
             else
             {
+                errorResponse errorMessage = new errorResponse(serverStatus.ERROR_WRONG_EMAIL_PASSWORD);
+                String errorMessageString = gson.toJson(errorMessage);
+                sendMessageToUser(errorMessageString);
                 System.out.println("does not exists");
             }
         }
@@ -251,7 +257,10 @@ public class ClientHandler implements Runnable
             if(connect.resultset.next())
             {
                 //TODO: duplicate email
-                System.out.println("me here");
+                errorResponse errorMessage = new errorResponse(serverStatus.ERROR_EMAIL_ALREADY_EXISTS);
+                String errorMessageString = gson.toJson(errorMessage);
+                sendMessageToUser(errorMessageString);
+                System.out.println("email already exist");
             }
             else
             {
@@ -300,6 +309,9 @@ public class ClientHandler implements Runnable
             }
             else
             {
+                errorResponse errorMessage = new errorResponse(serverStatus.ERROR_VERIFY_CODE);
+                String errorMessageString = gson.toJson(errorMessage);
+                sendMessageToUser(errorMessageString);
                 System.out.println("something ain't right...");
             }
         } 

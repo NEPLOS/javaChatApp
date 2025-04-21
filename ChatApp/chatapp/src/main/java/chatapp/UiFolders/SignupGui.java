@@ -28,7 +28,6 @@ public class SignupGui extends Form
 
     JPanel signUpPanel = new JPanel();
     JPanel animationPanel = new JPanel();
-
     JLabel signUpLabel = new JLabel("Sign Up");
     JLabel emailLable = new JLabel("Email: ");
     JTextField emailFeild = new JTextField();
@@ -36,10 +35,10 @@ public class SignupGui extends Form
     JPasswordField passwordFeild = new JPasswordField();
     JLabel passwordlLable_2 = new JLabel("Confrim Password: ");
     JPasswordField passwordFeild_2 = new JPasswordField();
-    JButton SignUpButton = new JButton("SignUp");
+    public static JButton SignUpButton = new JButton("SignUp");
 
-    ImageIcon loginFailedIcon = new ImageIcon(Constants.CURRENT_PATH_STRING + "/resources/error24.png");
-    JLabel loginFailed = new JLabel("Login failed, email or password is incorrect");
+    //ImageIcon loginFailedIcon = new ImageIcon(Constants.CURRENT_PATH_STRING + "/resources/error24.png");
+    //JLabel loginFailed = new JLabel("Login failed, email or password is incorrect");
     boolean showError = false;
 
     JLabel loginLink = new JLabel("already have an account ? click here");
@@ -133,10 +132,11 @@ public class SignupGui extends Form
                     String srJson = app.client.gson.toJson(sr);
                     System.out.println(srJson);
                     app.client.sendMessage(srJson);
+                    SignUpButton.setEnabled(false);
                 }
                 else
                 {
-                    System.out.println("wrong password");
+                    System.out.println("wrong stuff ig");
                 }
 
                 // app.ui.mainPanel.add(new verificationGui(app,""), "verify");

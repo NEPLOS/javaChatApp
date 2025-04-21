@@ -13,5 +13,8 @@ public class serverStatus
     public static final int ERROR_EMAIL_ALREADY_EXISTS = 401;
     public static final int ERROR_WRONG_EMAIL_PASSWORD = 402;
     public static final int ERROR_VERIFY_CODE = 403;
+    public static final int ERROR_WRONG_FORMAT = 404;
+
+    public static final int ERROR_SOMETHING_WENT_WRONG = 499;
 
 }

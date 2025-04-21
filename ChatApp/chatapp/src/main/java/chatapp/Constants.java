@@ -6,7 +6,7 @@ public class Constants
 {
     // #22223B;
     // #202035;
-    public static final String CURRENT_PATH_STRING = System.getProperty("user.dir") + "/chatapp/src/main";
+    public static final String CURRENT_PATH_STRING = System.getProperty("user.dir") + "/src/main";
     public static final Color PRIMARY_COLOR = Color.decode("#19192b");
     public static final Color PRIMARY2_COLOR = Color.decode("#202035");
     public static final Color SECOND_COLOR = Color.decode("#4A4E69");

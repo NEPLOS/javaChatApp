@@ -13,9 +13,12 @@ import org.json.JSONObject;
 
 import com.google.gson.Gson;
 
+import chatapp.Response.errorResponse;
 import chatapp.Response.loginResponse;
 import chatapp.Response.signupResponse;
+import chatapp.UiFolders.LoginGui;
 import chatapp.UiFolders.MainUi;
+import chatapp.UiFolders.SignupGui;
 import chatapp.UiFolders.UiManager;
 import chatapp.UiFolders.verificationGui;
 
@@ -139,8 +142,28 @@ public class Client
                                 ui.mainPanel.add(new verificationGui(app,ls.email), "verify");
                                 ui.showPage("verify");
                             }
+                            else if(type.equals("errorResponse"))
+                            {
+                                errorResponse errorRes = gson.fromJson(newMessage, errorResponse.class); 
+                                // handle changes
+                                if(errorRes.status == Constants.ERROR_EMAIL_ALREADY_EXISTS)
+                                {
+                                    System.out.println("ERROR : (signup) email is already in use");
+                                    SignupGui.SignUpButton.setEnabled(true);
+                                }
+                                else if(errorRes.status == Constants.ERROR_WRONG_EMAIL_PASSWORD)
+                                {
+                                    System.out.println("ERROR : (login) email or password is wrong");
+                                    LoginGui.loginButton.setEnabled(true);
+                                    ui.showPage("login");
+                                }
+                                else if(errorRes.status == Constants.ERROR_VERIFY_CODE)
+                                {
+                                    System.out.println("ERROR : (verify) wrong verification code");
+                                }
+                            }
                             else
-                                System.out.println("nah");
+                                System.out.println("nah i'm out KneeGrow");
                             // if(response.obj instanceof successfulConnection)
                             // {
                             //     successfulConnection test = (successfulConnection)response.obj;

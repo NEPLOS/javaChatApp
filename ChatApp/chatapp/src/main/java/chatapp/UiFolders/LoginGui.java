@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingWorker;
 
 import chatapp.App;
 import chatapp.Client;
@@ -28,16 +29,15 @@ public class LoginGui extends Form {
 
     JPanel loginPage = new JPanel();
     JPanel animationPanel = new JPanel();
-
     JLabel loginLable = new JLabel("Login"); // login lable
     JLabel emailLable = new JLabel("Email: ");
     JTextField emailFeild = new JTextField();
     JLabel passwordlLable = new JLabel("Password: ");
     JPasswordField passwordFeild = new JPasswordField();
-    JButton loginButton = new JButton("Login");
     ImageIcon loginFailedIcon = new ImageIcon(Constants.CURRENT_PATH_STRING + "/resources/error24.png");
     JLabel loginFailed = new JLabel("Login failed, email or password is incorrect");
     boolean showError = false;
+    public static JButton loginButton = new JButton("Login");
     
     JLabel signUpLink = new JLabel("don't havea an account ? click here");
 
@@ -97,7 +97,7 @@ public class LoginGui extends Form {
             return false;
         }
 
-        if(password.length() < 8 )
+        if(password.length() < 1 )
             return false;
         
 
@@ -154,18 +154,29 @@ public class LoginGui extends Form {
             public void actionPerformed(ActionEvent e) 
             {
                 System.out.println("Send button clicked!");
-
-
+                
                 if(loginFilters())
                 {
-                                        
-                    loginRes = new loginRequest(emailFeild.getText(), new String(passwordFeild.getPassword()));
+
+                    // new SwingWorker<Void, Void>() {
+                    //     @Override
+                    //     protected Void doInBackground() throws Exception 
+                    //     {
+                            loginRes = new loginRequest(emailFeild.getText(), new String(passwordFeild.getPassword()));
+                        
+                            String messageToServer = Client.gson.toJson(loginRes);
+
+                            app.client.sendMessage(messageToServer);
+
+                            loginButton.setEnabled(false);
+                    //         return null;
+                    //     }
+                    //     @Override
+                    //     protected void done() {
+                    //         loginButton.setEnabled(true);
+                    //     }
+                    // }.execute();
                     
-                    String messageToServer = Client.gson.toJson(loginRes);
-                    
-                    app.client.sendMessage(messageToServer);
-                    
-                    loginButton.setEnabled(false);
                 }
                 else
                 {   

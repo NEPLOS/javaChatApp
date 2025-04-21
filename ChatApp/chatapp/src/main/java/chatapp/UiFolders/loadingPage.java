@@ -27,14 +27,14 @@ public class loadingPage extends Form {
         loadingLabel.setBounds(0,0,720,500);
 
         //loadingLabel.setForeground();
-       // loadingLabel.setForeground(Constants.PRIMARY_COLOR);
+        //loadingLabel.setForeground(Constants.PRIMARY_COLOR);
         loadingLabel.setHorizontalAlignment(SwingConstants.CENTER);
         loadingLabel.setVerticalAlignment(SwingConstants.CENTER);
 
         loadinPanel.add(loadingLabel);
         loadinPanel.setBackground(Constants.PRIMARY_COLOR);
         loadinPanel.setBounds(0,0,720,500);
-
+ 
         add(loadinPanel);
     }
 }
