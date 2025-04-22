@@ -154,6 +154,7 @@ public class Client
                                 else if(errorRes.status == Constants.ERROR_WRONG_EMAIL_PASSWORD)
                                 {
                                     System.out.println("ERROR : (login) email or password is wrong");
+                                    LoginGui.ShowError("email or password is wrong");
                                     LoginGui.loginButton.setEnabled(true);
                                     ui.showPage("login");
                                 }

@@ -68,7 +68,7 @@ public class ClientHandler implements Runnable
         String respond = "";
         handShakeRequest lr = gson.fromJson(data, handShakeRequest.class);
         
-        try 
+        try
         {
 
             if(lr.cookie == null)
@@ -112,6 +112,7 @@ public class ClientHandler implements Runnable
 
         while(socket.isConnected())
         {
+            System.out.println("HELLO");
             try 
             {
                 message = bufferreader.readLine();
@@ -164,7 +165,7 @@ public class ClientHandler implements Runnable
     {
         try
         {
-           // String successConnection = gson.toJson(new successfulConnection());
+            //String successConnection = gson.toJson(new successfulConnection());
             //System.out.println(message);
             bufferwriter.write(message);
             bufferwriter.newLine();
@@ -180,7 +181,7 @@ public class ClientHandler implements Runnable
 
     public void removeClient()
     {
-        System.out.println("SERVER: someone has left the chat");
+        System.out.println("SERVER: someone has left the chat/app");
         if(userEmail != null)
             connect.query("DELETE FROM tempUser WHERE email='"+userEmail+"';");
         handler.remove(this);
@@ -298,7 +299,7 @@ public class ClientHandler implements Runnable
                 if(verifyCode.equals(requestVerify.verificationCode))
                 {
                     String cookie = generateCookie();
-                    String randomUsername = getSaltString();
+                    String randomUsername = getSaltString();    
                     connect.query("INSERT INTO user values('"+verifyEmail+"' , '"+verifyPassword+"' , '"+randomUsername+"' ,'"+cookie+"');");
                     connect.query("DELETE FROM tempUser WHERE email='"+verifyEmail+"';");
                     userEmail = null;
@@ -322,7 +323,7 @@ public class ClientHandler implements Runnable
     }
 
 
-    public String getSaltString() { // got it from stackoverflow , don't u fucking dare 
+    public String getSaltString() { // got it from stackoverflow , don't u fucking dare petronize me 
         String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         StringBuilder salt = new StringBuilder();
         Random rnd = new Random();

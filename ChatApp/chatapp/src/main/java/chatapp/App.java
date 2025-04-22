@@ -93,7 +93,27 @@ public class App
         catch( Exception e)
         {
             e.printStackTrace();
-            return "";
+            File jsonFile = new File("config.json");
+            jsonFile.delete();
+            System.out.println("i'm here 1 ");
+            handShakeRequest user = new handShakeRequest(null);
+            String userJson = client.gson.toJson(user);
+            try
+            {
+                if(jsonFile.createNewFile())
+                {                 
+                    FileWriter writer = new FileWriter("config.json");
+                    System.out.println("handchake request : " + userJson);
+                    writer.write(userJson);
+                    writer.close();
+                }
+            }
+            catch(Exception ee)
+            {
+                System.out.println("NAH AH");
+            }
+
+            return userJson;
         }
     }
 }

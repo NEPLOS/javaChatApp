@@ -18,7 +18,7 @@ public class MyJDBC
         try 
         {
             connection = DriverManager.getConnection("jdbc:mysql://" + ip + ":" + port + "/" + file , "root" , "Parham_1");
-            statement = connection.createStatement();   
+            statement  = connection.createStatement();   
         } 
         catch (SQLException e) 
         {
@@ -55,7 +55,8 @@ public class MyJDBC
         
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) 
+    {
         MyJDBC connection = new MyJDBC("127.0.0.1", "3306", "mydb");
     }
     

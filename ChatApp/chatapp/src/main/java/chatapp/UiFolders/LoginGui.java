@@ -18,7 +18,6 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.SwingWorker;
 
 import chatapp.App;
 import chatapp.Client;
@@ -27,16 +26,16 @@ import chatapp.Request.loginRequest;
 
 public class LoginGui extends Form {
 
-    JPanel loginPage = new JPanel();
-    JPanel animationPanel = new JPanel();
-    JLabel loginLable = new JLabel("Login"); // login lable
-    JLabel emailLable = new JLabel("Email: ");
-    JTextField emailFeild = new JTextField();
-    JLabel passwordlLable = new JLabel("Password: ");
-    JPasswordField passwordFeild = new JPasswordField();
-    ImageIcon loginFailedIcon = new ImageIcon(Constants.CURRENT_PATH_STRING + "/resources/error24.png");
-    JLabel loginFailed = new JLabel("Login failed, email or password is incorrect");
-    boolean showError = false;
+    public static JPanel loginPage = new JPanel();
+    public static JPanel animationPanel = new JPanel();
+    public static JLabel loginLable = new JLabel("Login"); // login lable
+    public static JLabel emailLable = new JLabel("Email: ");
+    public static JTextField emailFeild = new JTextField();
+    public static JLabel passwordlLable = new JLabel("Password: ");
+    public static JPasswordField passwordFeild = new JPasswordField();
+    public static ImageIcon loginFailedIcon = new ImageIcon(Constants.CURRENT_PATH_STRING + "/resources/error24.png");
+    public static JLabel loginFailed = new JLabel(":D");
+    public static boolean showError = false;
     public static JButton loginButton = new JButton("Login");
     
     JLabel signUpLink = new JLabel("don't havea an account ? click here");
@@ -104,6 +103,12 @@ public class LoginGui extends Form {
         return true;
     }
     
+    public static void ShowError(String Text)
+    {
+        loginFailed.setText(Text);
+        loginFailed.setVisible(true);
+        loginPage.repaint();
+    }
     
     public void addGuiElements()
     {
@@ -162,13 +167,13 @@ public class LoginGui extends Form {
                     //     @Override
                     //     protected Void doInBackground() throws Exception 
                     //     {
-                            loginRes = new loginRequest(emailFeild.getText(), new String(passwordFeild.getPassword()));
-                        
-                            String messageToServer = Client.gson.toJson(loginRes);
+                    loginRes = new loginRequest(emailFeild.getText(), new String(passwordFeild.getPassword()));
+                
+                    String messageToServer = Client.gson.toJson(loginRes);
 
-                            app.client.sendMessage(messageToServer);
+                    app.client.sendMessage(messageToServer);
 
-                            loginButton.setEnabled(false);
+                    loginButton.setEnabled(false);
                     //         return null;
                     //     }
                     //     @Override
@@ -180,12 +185,13 @@ public class LoginGui extends Form {
                 }
                 else
                 {   
-                    if(showError == false)
-                    {
-                        loginFailed.setText("pls fill the email and password correctly");
-                        loginFailed.setVisible(true);
-                        repaint();
-                    }
+                    // if(showError == false)
+                    // {
+                    //     loginFailed.setText("pls fill the email and password correctly");
+                    //     loginFailed.setVisible(true);
+                    //     repaint();
+                    // }
+                    ShowError("pls fill the email and password correctly");
                 }
                 
             }
