@@ -6,10 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Random;
 
 import org.json.JSONObject;
 
@@ -44,7 +41,7 @@ public class ClientHandler implements Runnable
             this.bufferwriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             this.bufferreader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String UserData = bufferreader.readLine();
-            System.out.println(UserData);
+            System.out.println( "new user : " + UserData);
 
             //handShakeRequest g = new handShakeRequest();
             
@@ -67,6 +64,7 @@ public class ClientHandler implements Runnable
     {
         String respond = "";
         handShakeRequest lr = gson.fromJson(data, handShakeRequest.class);
+        lr.cookie = utils.checkForInjection(lr.cookie);
         
         try
         {
@@ -95,14 +93,14 @@ public class ClientHandler implements Runnable
                     respond = gson.toJson(logIn);
                 }
             }
-            System.out.println("json respond : " + respond);
+            System.out.println("json respond for users first connection : " + respond);
             sendMessageToUser(respond);
 
         
         } 
         catch (Exception e) 
         {
-        
+            e.printStackTrace();
         }
     }
     
@@ -112,21 +110,23 @@ public class ClientHandler implements Runnable
 
         while(socket.isConnected())
         {
-            System.out.println("HELLO");
-            try 
+            System.out.println("HELLO user");
+            try
             {
                 message = bufferreader.readLine();
+
+                //System.out.println("HELLO2");
 
                 if(message != null && handler.contains(this))
                 {
                     //connect.query("INSERT INTO message values('"+clientUserName+"','"+message+"')");
                     
                     JSONObject jsonResponse = new JSONObject(message);
-                    System.out.println(jsonResponse);
+                    System.out.println( "message from client : " + jsonResponse);
                     
                     String type = jsonResponse.getString("type");
 
-                    System.out.println("type");
+                   // System.out.println("type");
 
                     if(type.equals("loginRequest"))
                     {
@@ -155,6 +155,7 @@ public class ClientHandler implements Runnable
             } 
             catch (Exception e) 
             {
+                e.printStackTrace();
                 closeEveryThing(socket, bufferreader, bufferwriter);
                 break;
             }
@@ -205,13 +206,24 @@ public class ClientHandler implements Runnable
         }
     }
 
+
     public void loginRequestFunc(String text)
     {
         try
         {
-
             loginRequest lr = gson.fromJson(text, loginRequest.class);
-            String query = "";
+
+            lr.email = utils.checkForInjection(lr.email);
+            lr.password = utils.checkForInjection(lr.password);
+
+            if(!utils.emailFilter(lr.email))
+            {
+                errorResponse errorMessage = new errorResponse(serverStatus.ERROR_LOGIN_WRONG_FORMAT);
+                String errorMessageString = gson.toJson(errorMessage);
+                sendMessageToUser(errorMessageString);
+                System.out.println("wrong format");
+                return;
+            }
             // if(lr.cookie == null)
             // {
             //     query = "SELECT * FROM user WHERE email = '"+lr.email+"' AND password = '"+lr.password+"';";
@@ -221,26 +233,28 @@ public class ClientHandler implements Runnable
                 //     query = "SELECT * FROM user WHERE cookie = '"+lr.cookie+"';";
                 // }
                 
-            System.out.println("yo");
-            connect.querySelect("SELECT * FROM user WHERE email = '"+lr.email+"' AND password = '"+lr.password+"';");
+          //  System.out.println("yo");
+            String finalQuery = "SELECT * FROM user WHERE email = '"+lr.email+"' AND password = '"+lr.password+"';";
+            System.out.println("final query : " + finalQuery);
+            connect.querySelect(finalQuery);
             if(connect.resultset.next())
             {
                 //System.out.println("it exists");
-                String LoginDataEmail = connect.resultset.getString("email");
-                String LoginDataCookie = connect.resultset.getString("cookie");
-                String LoginDataUsername = connect.resultset.getString("username");
+                String LoginDataEmail = utils.checkForInjection(connect.resultset.getString("email"));
+                String LoginDataCookie = utils.checkForInjection(connect.resultset.getString("cookie"));
+                String LoginDataUsername = utils.checkForInjection(connect.resultset.getString("username"));
                 userEmail = LoginDataEmail;
                 loginResponse logS = new loginResponse(LoginDataEmail, LoginDataCookie, LoginDataUsername);
                 String JsonLogSuccess = gson.toJson(logS);
-                System.out.println(JsonLogSuccess);
+                System.out.println( "successful login : " + JsonLogSuccess);
                 sendMessageToUser(JsonLogSuccess);
             }
             else
             {
-                errorResponse errorMessage = new errorResponse(serverStatus.ERROR_WRONG_EMAIL_PASSWORD);
+                errorResponse errorMessage = new errorResponse(serverStatus.ERROR_LOGIN_EMAIL_PASSWORD);
                 String errorMessageString = gson.toJson(errorMessage);
                 sendMessageToUser(errorMessageString);
-                System.out.println("does not exists");
+                System.out.println("login or password is wrong");
             }
         }
         catch(Exception e)
@@ -253,19 +267,41 @@ public class ClientHandler implements Runnable
         try 
         {
             signupRequest lr = gson.fromJson(text, signupRequest.class);
+
+            lr.email = utils.checkForInjection(lr.email);
+            lr.password = utils.checkForInjection(lr.password);
+
+            if(!lr.email.endsWith("@gmail.com"))
+            {
+                errorResponse errorMessage = new errorResponse(serverStatus.ERROR_SIGNUP_NOT_GMAIL);
+                String errorMessageString = gson.toJson(errorMessage);
+                sendMessageToUser(errorMessageString);
+                System.out.println("WRONG FORMAT");
+                return ;
+            }
+
+            if(!(lr.password.length() > 7))
+            {
+                errorResponse errorMessage = new errorResponse(serverStatus.ERROR_SIGNUP_PASSWORD_SIZE);
+                String errorMessageString = gson.toJson(errorMessage);
+                sendMessageToUser(errorMessageString);
+                System.out.println("password is less than 8 char");
+                return;
+            }
+
             connect.querySelect("SELECT * FROM user WHERE email='"+lr.email+"';");
 
             if(connect.resultset.next())
             {
                 //TODO: duplicate email
-                errorResponse errorMessage = new errorResponse(serverStatus.ERROR_EMAIL_ALREADY_EXISTS);
+                errorResponse errorMessage = new errorResponse(serverStatus.ERROR_SIGNUP_EMAIL_ALREADY_EXISTS);
                 String errorMessageString = gson.toJson(errorMessage);
                 sendMessageToUser(errorMessageString);
                 System.out.println("email already exist");
             }
             else
             {
-                String verificationCode = getSaltString();
+                String verificationCode = utils.getSaltString();
                 connect.query("INSERT INTO tempUser values('"+lr.email+"', '"+lr.password+"' ,'"+verificationCode+"')");
                 signupResponse sr = new signupResponse(lr.email);
                 userEmail = lr.email;
@@ -288,19 +324,26 @@ public class ClientHandler implements Runnable
         {
             verificationRequest requestVerify = gson.fromJson(text, verificationRequest.class);
 
+            requestVerify.verificationCode = utils.checkForInjection(requestVerify.verificationCode );
+            userEmail = utils.checkForInjection(userEmail);
+
+            System.out.println("verify code func");
+
             connect.querySelect("SELECT * FROM tempUser WHERE email='"+userEmail+"';");
 
             if(connect.resultset.next())
             {
-                String verifyEmail = connect.resultset.getString("email");
-                String verifyPassword = connect.resultset.getString("password");
-                String verifyCode = connect.resultset.getString("verifyCode");
+                String verifyEmail = utils.checkForInjection(connect.resultset.getString("email"));
+                String verifyPassword = utils.checkForInjection(connect.resultset.getString("password"));
+                String verifyCode = utils.checkForInjection(connect.resultset.getString("verifyCode"));
 
                 if(verifyCode.equals(requestVerify.verificationCode))
                 {
-                    String cookie = generateCookie();
-                    String randomUsername = getSaltString();    
-                    connect.query("INSERT INTO user values('"+verifyEmail+"' , '"+verifyPassword+"' , '"+randomUsername+"' ,'"+cookie+"');");
+                    String cookie = utils.generateCookie();
+                    String randomUsername = utils.getSaltString();
+                    String finalQuery = "INSERT INTO user values('"+verifyEmail+"' , '"+verifyPassword+"' , '"+randomUsername+"' ,'"+cookie+"');";
+                    System.out.println("verify code : " + finalQuery);
+                    connect.query(finalQuery);
                     connect.query("DELETE FROM tempUser WHERE email='"+verifyEmail+"';");
                     userEmail = null;
                     loginResponse lr = new loginResponse(verifyEmail, cookie, randomUsername);
@@ -322,24 +365,4 @@ public class ClientHandler implements Runnable
         }
     }
 
-
-    public String getSaltString() { // got it from stackoverflow , don't u fucking dare petronize me 
-        String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-        StringBuilder salt = new StringBuilder();
-        Random rnd = new Random();
-        while (salt.length() < 8) {
-            int index = (int) (rnd.nextFloat() * SALTCHARS.length());
-            salt.append(SALTCHARS.charAt(index));
-        }
-        String saltStr = salt.toString();
-        return saltStr;
-
-    }
-
-    public String generateCookie() { // samething here , i don't know java 
-        SecureRandom random = new SecureRandom();
-        byte[] bytes = new byte[32];
-        random.nextBytes(bytes);
-        return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
-    }
 }

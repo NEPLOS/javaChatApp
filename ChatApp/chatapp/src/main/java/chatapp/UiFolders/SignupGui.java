@@ -26,7 +26,7 @@ import chatapp.Request.signupRequest;
 public class SignupGui extends Form 
 {
 
-    JPanel signUpPanel = new JPanel();
+    static JPanel signUpPanel = new JPanel();
     JPanel animationPanel = new JPanel();
     JLabel signUpLabel = new JLabel("Sign Up");
     JLabel emailLable = new JLabel("Email: ");
@@ -36,6 +36,9 @@ public class SignupGui extends Form
     JLabel passwordlLable_2 = new JLabel("Confrim Password: ");
     JPasswordField passwordFeild_2 = new JPasswordField();
     public static JButton SignUpButton = new JButton("SignUp");
+
+    public static ImageIcon errorLabelIcon = new ImageIcon(Constants.CURRENT_PATH_STRING + "/resources/error24.png");
+    public static JLabel errorLabel = new JLabel(":D");
 
     //ImageIcon loginFailedIcon = new ImageIcon(Constants.CURRENT_PATH_STRING + "/resources/error24.png");
     //JLabel loginFailed = new JLabel("Login failed, email or password is incorrect");
@@ -57,6 +60,13 @@ public class SignupGui extends Form
     //     g.setColor(Color.BLACK);
     //     g.drawLine(359, 0, 359, 500);
     // }
+
+    public static void ShowError(String Text)
+    {
+        errorLabel.setText(Text);
+        errorLabel.setVisible(true);
+        signUpPanel.repaint();
+    }
 
     public void addGuiElements()
     {
@@ -110,6 +120,19 @@ public class SignupGui extends Form
         signUpPanel.add(passwordFeild_2);
 
 
+        errorLabel.setBounds(20 , 290 , 320 , 35);
+        errorLabel.setOpaque(true);
+        //rgb(226, 153, 153)
+        errorLabel.setBackground(new Color(226,153,153,80));
+        errorLabel.setForeground(Constants.ERROR_COLOR);
+        errorLabel.setIcon(errorLabelIcon);
+        errorLabel.setIconTextGap(12);
+        //Border border = new javax.swing.border.LineBorder(Color.RED, 2, true);
+        errorLabel.setBorder(null);
+        errorLabel.setVisible(false);
+        signUpPanel.add(errorLabel);
+        
+
         SignUpButton.setFont(new Font( "Dialog" , Font.PLAIN , 14 ));
         SignUpButton.setBackground(Constants.TEXT_COLOR);
         SignUpButton.setBounds(60 , 380 , 250 , 30);
@@ -136,6 +159,7 @@ public class SignupGui extends Form
                 }
                 else
                 {
+                    ShowError("wrong password");
                     System.out.println("wrong stuff ig");
                 }
 

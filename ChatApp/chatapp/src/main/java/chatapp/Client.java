@@ -146,15 +146,35 @@ public class Client
                             {
                                 errorResponse errorRes = gson.fromJson(newMessage, errorResponse.class); 
                                 // handle changes
-                                if(errorRes.status == Constants.ERROR_EMAIL_ALREADY_EXISTS)
+                                if(errorRes.status == Constants.ERROR_SIGNUP_EMAIL_ALREADY_EXISTS)
                                 {
+                                    SignupGui.ShowError("email already exists");
                                     System.out.println("ERROR : (signup) email is already in use");
                                     SignupGui.SignUpButton.setEnabled(true);
                                 }
-                                else if(errorRes.status == Constants.ERROR_WRONG_EMAIL_PASSWORD)
+                                else if(errorRes.status == Constants.ERROR_SIGNUP_NOT_GMAIL)
+                                {
+                                    SignupGui.ShowError("only gmail is acceptable");
+                                    System.out.println("ERROR : (signup) not gmail");
+                                    SignupGui.SignUpButton.setEnabled(true);
+                                }
+                                else if(errorRes.status == Constants.ERROR_SIGNUP_PASSWORD_SIZE)
+                                {
+                                    SignupGui.ShowError("password size is less than 8");
+                                    System.out.println("ERROR : (signup) password size is less than 8");
+                                    SignupGui.SignUpButton.setEnabled(true);
+                                }
+                                else if(errorRes.status == Constants.ERROR_LOGIN_EMAIL_PASSWORD)
                                 {
                                     System.out.println("ERROR : (login) email or password is wrong");
                                     LoginGui.ShowError("email or password is wrong");
+                                    LoginGui.loginButton.setEnabled(true);
+                                    ui.showPage("login");
+                                }
+                                else if(errorRes.status == Constants.ERROR_LOGIN_WRONG_FORMAT)
+                                {
+                                    System.out.println("ERROR : (login) wrong email format");
+                                    LoginGui.ShowError("email format is wrong");
                                     LoginGui.loginButton.setEnabled(true);
                                     ui.showPage("login");
                                 }

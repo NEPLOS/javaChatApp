@@ -91,10 +91,10 @@ public class LoginGui extends Form {
         String email = emailFeild.getText();
         String password = new String(passwordFeild.getPassword());
 
-        if(!(email.endsWith("@gmail.com") && countChar(email,'@') == 1))
-        {
-            return false;
-        }
+        // if(!(email.endsWith("@gmail.com") && countChar(email,'@') == 1))
+        // {
+        //     return false;
+        // }
 
         if(password.length() < 1 )
             return false;
