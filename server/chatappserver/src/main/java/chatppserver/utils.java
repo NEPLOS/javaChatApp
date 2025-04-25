@@ -49,39 +49,6 @@ public class utils
         System.out.println("input : " + input);
         if(input == null)
             return input;
-        // for (int i = 0; i < input.length(); i++) {
-        //     if(input.charAt(i) == '\'' || input.charAt(i) == '\"')
-        //     {
-        //         if(i > 0)
-        //         {
-        //             if(input.charAt(i - 1) == '\\')
-        //             {
-        //                 if(amountOFcharInReverseInASequent(input , '\'' ,  i -1) % 2 == 1)
-        //                 {
-        //                     continue;
-        //                 }
-        //                 else
-        //                 {
-        //                     input = insertString(input, i);
-        //                     i++;
-        //                 }
-        //             }
-        //             else
-        //             {
-        //                 input = insertString(input, i);
-        //                 i++;
-        //             }
-        //         }
-        //         else
-        //         {
-        //             input = insertString(input, i);
-        //             i++;
-        //         }
-        //         // System.out.println("hello lad , something fishi is going on here");
-        //         // input = insertString(input, i);
-        //         // i++;
-        //     }
-        // }
         for (int i = input.length() - 1; i >= 0; i--) 
         {
             if(input.charAt(i) == '\'' || input.charAt(i) == '\\')

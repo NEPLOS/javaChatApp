@@ -25,4 +25,13 @@ public class serverStatus
     
     public static final int ERROR_SOMETHING_WENT_WRONG = 499;
 
+
+
+    public static final String ERROR_SIGNUP_EMAIL_ALREADY_EXISTS_DESC = "email already exists";
+    public static final String ERROR_SIGNUP_NOT_GMAIL_DESC = "only gmail is acceptable ";
+    public static final String ERROR_SIGNUP_PASSWORD_SIZE_DESC = "password size must be atleast 8 char";
+    public static final String ERROR_LOGIN_WRONG_FORMAT_DESC = "wrong email format";
+    public static final String ERROR_LOGIN_EMAIL_PASSWORD_DESC = "email or password is wrong";
+    public static final String ERROR_VERIFY_CODE_DESC = "verification failed";
+
 }

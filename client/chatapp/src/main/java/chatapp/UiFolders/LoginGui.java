@@ -170,10 +170,13 @@ public class LoginGui extends Form {
                     loginRes = new loginRequest(emailFeild.getText(), new String(passwordFeild.getPassword()));
                 
                     String messageToServer = Client.gson.toJson(loginRes);
-
+                    
                     app.client.sendMessage(messageToServer);
-
+                    
                     loginButton.setEnabled(false);
+                    
+                    loginFailed.setVisible(false);
+                    loginPage.repaint();
                     //         return null;
                     //     }
                     //     @Override

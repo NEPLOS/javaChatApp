@@ -148,43 +148,43 @@ public class Client
                                 // handle changes
                                 if(errorRes.status == Constants.ERROR_SIGNUP_EMAIL_ALREADY_EXISTS)
                                 {
-                                    SignupGui.ShowError("email already exists");
+                                    SignupGui.ShowError(errorRes.description);
                                     System.out.println("ERROR : (signup) email is already in use");
                                     SignupGui.SignUpButton.setEnabled(true);
                                 }
                                 else if(errorRes.status == Constants.ERROR_SIGNUP_NOT_GMAIL)
                                 {
-                                    SignupGui.ShowError("only gmail is acceptable");
+                                    SignupGui.ShowError(errorRes.description);
                                     System.out.println("ERROR : (signup) not gmail");
                                     SignupGui.SignUpButton.setEnabled(true);
                                 }
                                 else if(errorRes.status == Constants.ERROR_SIGNUP_PASSWORD_SIZE)
                                 {
-                                    SignupGui.ShowError("password size is less than 8");
+                                    SignupGui.ShowError(errorRes.description);
                                     System.out.println("ERROR : (signup) password size is less than 8");
                                     SignupGui.SignUpButton.setEnabled(true);
                                 }
                                 else if(errorRes.status == Constants.ERROR_LOGIN_EMAIL_PASSWORD)
                                 {
                                     System.out.println("ERROR : (login) email or password is wrong");
-                                    LoginGui.ShowError("email or password is wrong");
+                                    LoginGui.ShowError(errorRes.description);
                                     LoginGui.loginButton.setEnabled(true);
-                                    ui.showPage("login");
+                                    //ui.showPage("login");
                                 }
                                 else if(errorRes.status == Constants.ERROR_LOGIN_WRONG_FORMAT)
                                 {
                                     System.out.println("ERROR : (login) wrong email format");
-                                    LoginGui.ShowError("email format is wrong");
+                                    LoginGui.ShowError(errorRes.description);
                                     LoginGui.loginButton.setEnabled(true);
-                                    ui.showPage("login");
+                                    //ui.showPage("login");
                                 }
                                 else if(errorRes.status == Constants.ERROR_VERIFY_CODE)
                                 {
-                                    System.out.println("ERROR : (verify) wrong verification code");
+                                    System.out.println("ERROR : (verify) wrong verification code\n" + errorRes.description);
                                 }
                             }
                             else
-                                System.out.println("nah i'm out KneeGrow");
+                                System.out.println("nah i'm out");
                             // if(response.obj instanceof successfulConnection)
                             // {
                             //     successfulConnection test = (successfulConnection)response.obj;

@@ -126,7 +126,10 @@ public class ClientHandler implements Runnable
                     
                     String type = jsonResponse.getString("type");
 
+                    Thread.sleep(1000);
+
                    // System.out.println("type");
+
 
                     if(type.equals("loginRequest"))
                     {
@@ -218,7 +221,7 @@ public class ClientHandler implements Runnable
 
             if(!utils.emailFilter(lr.email))
             {
-                errorResponse errorMessage = new errorResponse(serverStatus.ERROR_LOGIN_WRONG_FORMAT);
+                errorResponse errorMessage = new errorResponse(serverStatus.ERROR_LOGIN_WRONG_FORMAT,serverStatus.ERROR_LOGIN_WRONG_FORMAT_DESC);
                 String errorMessageString = gson.toJson(errorMessage);
                 sendMessageToUser(errorMessageString);
                 System.out.println("wrong format");
@@ -251,7 +254,7 @@ public class ClientHandler implements Runnable
             }
             else
             {
-                errorResponse errorMessage = new errorResponse(serverStatus.ERROR_LOGIN_EMAIL_PASSWORD);
+                errorResponse errorMessage = new errorResponse(serverStatus.ERROR_LOGIN_EMAIL_PASSWORD , serverStatus.ERROR_LOGIN_EMAIL_PASSWORD_DESC);
                 String errorMessageString = gson.toJson(errorMessage);
                 sendMessageToUser(errorMessageString);
                 System.out.println("login or password is wrong");
@@ -273,7 +276,7 @@ public class ClientHandler implements Runnable
 
             if(!lr.email.endsWith("@gmail.com"))
             {
-                errorResponse errorMessage = new errorResponse(serverStatus.ERROR_SIGNUP_NOT_GMAIL);
+                errorResponse errorMessage = new errorResponse(serverStatus.ERROR_SIGNUP_NOT_GMAIL,serverStatus.ERROR_SIGNUP_NOT_GMAIL_DESC);
                 String errorMessageString = gson.toJson(errorMessage);
                 sendMessageToUser(errorMessageString);
                 System.out.println("WRONG FORMAT");
@@ -282,7 +285,7 @@ public class ClientHandler implements Runnable
 
             if(!(lr.password.length() > 7))
             {
-                errorResponse errorMessage = new errorResponse(serverStatus.ERROR_SIGNUP_PASSWORD_SIZE);
+                errorResponse errorMessage = new errorResponse(serverStatus.ERROR_SIGNUP_PASSWORD_SIZE , serverStatus.ERROR_SIGNUP_PASSWORD_SIZE_DESC);
                 String errorMessageString = gson.toJson(errorMessage);
                 sendMessageToUser(errorMessageString);
                 System.out.println("password is less than 8 char");
@@ -294,7 +297,7 @@ public class ClientHandler implements Runnable
             if(connect.resultset.next())
             {
                 //TODO: duplicate email
-                errorResponse errorMessage = new errorResponse(serverStatus.ERROR_SIGNUP_EMAIL_ALREADY_EXISTS);
+                errorResponse errorMessage = new errorResponse(serverStatus.ERROR_SIGNUP_EMAIL_ALREADY_EXISTS,serverStatus.ERROR_SIGNUP_EMAIL_ALREADY_EXISTS_DESC);
                 String errorMessageString = gson.toJson(errorMessage);
                 sendMessageToUser(errorMessageString);
                 System.out.println("email already exist");
@@ -353,7 +356,7 @@ public class ClientHandler implements Runnable
             }
             else
             {
-                errorResponse errorMessage = new errorResponse(serverStatus.ERROR_VERIFY_CODE);
+                errorResponse errorMessage = new errorResponse(serverStatus.ERROR_VERIFY_CODE,serverStatus.ERROR_VERIFY_CODE_DESC);
                 String errorMessageString = gson.toJson(errorMessage);
                 sendMessageToUser(errorMessageString);
                 System.out.println("something ain't right...");

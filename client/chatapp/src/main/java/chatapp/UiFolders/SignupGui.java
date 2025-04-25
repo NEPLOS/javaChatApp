@@ -156,6 +156,8 @@ public class SignupGui extends Form
                     System.out.println(srJson);
                     app.client.sendMessage(srJson);
                     SignUpButton.setEnabled(false);
+                    errorLabel.setVisible(false);
+                    signUpPanel.repaint();
                 }
                 else
                 {
